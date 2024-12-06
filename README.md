@@ -22,3 +22,9 @@ Further documentation can be found at <https://hexdocs.pm/gladvent_2024>.
 gleam run   # Run the project
 gleam test  # Run the tests
 ```
+
+## Improvements
+
+Could be nice to use [`envoy`](https://hexdocs.pm/envoy/)
+to detect whether we are running in CI or not, but 
+that doesn't solve the problem that the data modules don't exist.
