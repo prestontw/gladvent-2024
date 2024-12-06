@@ -8,6 +8,10 @@ pub fn lines(s: String) {
   s |> string.split("\n")
 }
 
+pub fn spaces(s: String) {
+  s |> string.split(" ")
+}
+
 pub fn sum(ln) {
   ln |> list.fold(0, fn(a, b) { a + b })
 }
