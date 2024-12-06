@@ -62,3 +62,11 @@ pub fn grid(s: String, string_to_item: fn(String) -> Result(item, Nil)) {
 
   Grid(number_rows, max_columns, data)
 }
+
+pub fn is_positive(i) {
+  i > 0
+}
+
+pub fn is_negative(i) {
+  i < 0
+}
