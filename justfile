@@ -11,5 +11,9 @@ watch-test:
 
 make-new-day day:
     cp src/day0.gleam src/{{day}}.gleam
-    cp src/data/day0.gleam src/data/{{day}}.gleam
+    sed -i 's/day0/{{day}}/g' src/{{day}}.gleam
+
     cp test/day0_test.gleam test/{{day}}_test.gleam
+    sed -i 's/day0/{{day}}/g' test/{{day}}_test.gleam
+
+    cp src/data/day0.gleam src/data/{{day}}.gleam
