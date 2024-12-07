@@ -5,6 +5,7 @@ import gleam/int
 import gleam/io
 import gleam/list
 import gleam/result
+import gleam/set
 import gleam/string
 import grid
 
@@ -54,6 +55,14 @@ fn star_4(point: #(Int, Int)) -> List(List(#(Int, Int))) {
   })
 }
 
+fn slash(point: #(Int, Int)) -> List(#(Int, Int)) {
+  [point, point |> move(NE), point |> move(SW)]
+}
+
+fn backslash(point: #(Int, Int)) -> List(#(Int, Int)) {
+  [point, point |> move(NW), point |> move(SE)]
+}
+
 pub fn part1(s: String) {
   let g = grid.new(s, Ok)
   let target = "XMAS" |> string.to_graphemes
@@ -80,7 +89,18 @@ pub fn part1(s: String) {
 }
 
 pub fn part2(s: String) {
-  s
-  |> common.lines
+  let g = s |> grid.new(Ok)
+  let target = "MAS" |> string.to_graphemes |> set.from_list
+
+  g.data
+  |> dict.filter(fn(_, v) { v == "A" })
+  |> dict.keys
+  |> list.filter(fn(pos) {
+    [pos |> slash, pos |> backslash]
+    |> list.all(fn(points) {
+      let letters = points |> list.filter_map(grid.get(g, _)) |> set.from_list
+      letters == target
+    })
+  })
   |> list.length
 }

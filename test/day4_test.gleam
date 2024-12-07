@@ -30,6 +30,17 @@ pub fn part2_test() {
 }
 
 pub fn part2_sample_test() {
-  day.part2("")
-  |> should.equal(1)
+  day.part2(
+    "MMMSXXMASM
+MSAMXMSMSA
+AMXSXMAAMM
+MSAMASMSMX
+XMASAMXAMM
+XXAMMXXAMA
+SMSMSASXSS
+SAXAMASAAA
+MAMMMXMMMM
+MXMXAXMASX",
+  )
+  |> should.equal(9)
 }
