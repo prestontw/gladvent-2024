@@ -26,7 +26,7 @@ MXMXAXMASX",
 
 pub fn part2_test() {
   day.part2(data.input())
-  |> should.equal(1)
+  |> should.equal(1809)
 }
 
 pub fn part2_sample_test() {
