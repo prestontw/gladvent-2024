@@ -25,7 +25,7 @@ pub fn new(
         |> string.to_graphemes
         |> list.index_fold(data, fn(data, char, char_index) {
           case string_to_item(char) {
-            Ok(item) -> data |> dict.insert(#(row_index, char_index), item)
+            Ok(item) -> data |> dict.insert(#(char_index, row_index), item)
             Error(_) -> data
           }
         })
@@ -38,4 +38,8 @@ pub fn new(
 
 pub fn get(g: Grid(item), pos: #(Int, Int)) -> Result(item, Nil) {
   g.data |> dict.get(pos)
+}
+
+pub fn set(g: Grid(item), pos: #(Int, Int), val: item) -> Grid(item) {
+  Grid(..g, data: g.data |> dict.insert(pos, val))
 }

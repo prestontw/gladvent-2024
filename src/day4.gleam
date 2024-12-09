@@ -39,8 +39,7 @@ fn direction_delta(d: Direction) -> #(Int, Int) {
 }
 
 fn move(point: #(Int, Int), d: Direction) -> #(Int, Int) {
-  let delta = d |> direction_delta
-  #(point.0 + delta.0, point.1 + delta.1)
+  common.move(point, d |> direction_delta)
 }
 
 fn star_4(point: #(Int, Int)) -> List(List(#(Int, Int))) {

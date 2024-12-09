@@ -83,3 +83,7 @@ pub fn fold_with_rest(
     }
   }
 }
+
+pub fn move(point: #(Int, Int), delta: #(Int, Int)) -> #(Int, Int) {
+  #(point.0 + delta.0, point.1 + delta.1)
+}
