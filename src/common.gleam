@@ -8,8 +8,16 @@ pub fn lines(s: String) {
   s |> string.split("\n")
 }
 
+pub fn paragraphs(s: String) {
+  s |> string.split("\n\n")
+}
+
 pub fn spaces(s: String) {
   s |> string.split(" ")
+}
+
+pub fn separated_numbers(s: String, sep: String) -> List(Int) {
+  s |> string.split(sep) |> list.filter_map(int.parse)
 }
 
 pub fn sum(ln) {
@@ -52,4 +60,26 @@ pub fn list_product(a_s: List(a), b_s: List(b)) -> List(List(#(a, b))) {
 
     [a_list, ..acc]
   })
+}
+
+pub fn enumerate(l: List(item)) -> List(#(Int, item)) {
+  l |> list.index_map(fn(a, i) { #(i, a) })
+}
+
+pub fn dict_of_indices(l: List(item)) -> dict.Dict(Int, item) {
+  l |> enumerate |> dict.from_list
+}
+
+pub fn fold_with_rest(
+  l: List(item),
+  initial: acc,
+  f: fn(acc, item, List(item)) -> acc,
+) -> acc {
+  case l {
+    [] -> initial
+    [first, ..rest] -> {
+      let acc = f(initial, first, rest)
+      fold_with_rest(rest, acc, f)
+    }
+  }
 }
