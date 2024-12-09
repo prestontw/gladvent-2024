@@ -5,6 +5,7 @@ import gleam/dict
 import gleam/int
 import gleam/io
 import gleam/list
+import gleam/order
 import gleam/result
 import gleam/set
 
@@ -88,7 +89,36 @@ fn parse_updates(s) {
 }
 
 pub fn part2(s: String) {
-  s
-  |> common.lines
-  |> list.length
+  // use list.sort and use ordering to create compare result
+
+  let assert [orderings, updates] = s |> common.paragraphs
+  let orderings = orderings |> parse_orderings |> new_orderings
+  let updates = updates |> parse_updates
+
+  updates
+  |> list.filter(fn(update) {
+    let ordered =
+      update
+      |> common.fold_with_rest(True, fn(acc, first, rest) {
+        acc
+        && {
+          rest
+          |> list.all(fn(following) {
+            orderings |> valid_ordering(first, following)
+          })
+        }
+      })
+    !ordered
+  })
+  |> list.map(fn(update) {
+    update
+    |> list.sort(fn(a, b) {
+      case orderings |> valid_ordering(a, b) {
+        True -> order.Lt
+        False -> order.Gt
+      }
+    })
+    |> middle_index
+  })
+  |> common.sum
 }

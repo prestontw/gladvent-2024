@@ -3,6 +3,7 @@ import day5 as day
 import gleeunit/should
 
 // gleeunit test functions end in `_test`
+// maybe add a structure to test all things just for one day
 pub fn part1_test() {
   day.part1(data.input())
   |> should.equal(6267)
@@ -44,7 +45,7 @@ pub fn part1_sample_test() {
 
 pub fn part2_test() {
   day.part2(data.input())
-  |> should.equal(1)
+  |> should.equal(5184)
 }
 
 pub fn part2_sample_test() {
