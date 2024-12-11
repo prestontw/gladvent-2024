@@ -15,7 +15,7 @@ pub fn input_test_() {
       |> should.equal(4454)
 
       day.part2(data.input())
-      |> should.equal(1)
+      |> should.equal(1503)
     },
   ])
 }
