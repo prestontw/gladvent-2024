@@ -2,13 +2,22 @@ import data/day6 as data
 import day6 as day
 import gleeunit/should
 
-// gleeunit test functions end in `_test`
-pub fn input_test() {
-  day.part1(data.input())
-  |> should.equal(4454)
+pub type Timeout {
+  Timeout
+}
 
-  day.part2(data.input())
-  |> should.equal(1)
+// gleeunit test functions end in `_test`
+pub fn input_test_() {
+  let timeout_seconds = 60
+  #(Timeout, timeout_seconds, [
+    fn() {
+      day.part1(data.input())
+      |> should.equal(4454)
+
+      day.part2(data.input())
+      |> should.equal(1)
+    },
+  ])
 }
 
 pub fn sample_test() {
