@@ -1,9 +1,12 @@
 import common
 import data/day6 as data
+import gleam/bool
 import gleam/dict
 import gleam/int
 import gleam/io
 import gleam/list
+import gleam/option
+import gleam/result
 import gleam/set
 import grid
 
@@ -47,6 +50,15 @@ type State {
   State(
     grid: grid.Grid(Space),
     visited: set.Set(#(Int, Int)),
+    guard_pos: #(Int, Int),
+    guard_direction: Direction,
+  )
+}
+
+type State2 {
+  State2(
+    grid: grid.Grid(Space),
+    visited: dict.Dict(#(Int, Int), set.Set(Direction)),
     guard_pos: #(Int, Int),
     guard_direction: Direction,
   )
@@ -109,9 +121,42 @@ fn next_state(s: State) -> Result(State, Stop) {
   }
 }
 
+fn next_state2(s: State2) -> Result(State2, Stop) {
+  let next_pos =
+    s.guard_pos |> common.move(s.guard_direction |> direction_delta)
+  use <- bool.guard(
+    when: s.visited
+      |> dict.get(s.guard_pos)
+      |> result.lazy_unwrap(set.new)
+      |> set.contains(s.guard_direction),
+    return: Error(Cycle),
+  )
+  // update this to upsert
+  let next_visited =
+    s.visited
+    |> dict.upsert(s.guard_pos, fn(val) {
+      val
+      |> option.lazy_unwrap(set.new)
+      |> set.insert(s.guard_direction)
+    })
+  case next_pos |> grid.get(s.grid, _) {
+    Ok(Wall) -> Ok(State2(..s, guard_direction: s.guard_direction |> rotate_90))
+    Ok(Empty) -> Ok(State2(..s, guard_pos: next_pos, visited: next_visited))
+    Ok(Guard) -> todo
+    Error(_) -> Error(OffMap)
+  }
+}
+
 fn run(s: State) -> #(State, Stop) {
   case s |> next_state {
     Ok(s) -> run(s)
+    Error(reason) -> #(s, reason)
+  }
+}
+
+fn run2(s: State2) -> #(State2, Stop) {
+  case s |> next_state2 {
+    Ok(s) -> run2(s)
     Error(reason) -> #(s, reason)
   }
 }
@@ -132,7 +177,23 @@ pub fn part1(s: String) {
 pub fn part2(s: String) {
   // cycle if end back up at position going the same direction
   // check all places that we visited as our short list
-  s
-  |> common.lines
-  |> list.length
+  let visited = s |> visited
+  let state = s |> new_state
+  let assert [start_position] = state.visited |> set.to_list
+  let obstacle_locations = visited |> set.delete(start_position)
+  obstacle_locations
+  |> set.filter(fn(obstacle_location) {
+    let state =
+      State2(
+        grid: state.grid |> grid.set(obstacle_location, Wall),
+        guard_pos: state.guard_pos,
+        guard_direction: state.guard_direction,
+        visited: dict.new(),
+      )
+    case state |> run2 {
+      #(_, Cycle) -> True
+      _ -> False
+    }
+  })
+  |> set.size
 }
