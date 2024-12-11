@@ -8,6 +8,7 @@ pub type Timeout {
 
 // gleeunit test functions end in `_test`
 pub fn input_test_() {
+  //         ^^^^^ Must end with an underscore
   let timeout_seconds = 60
   #(Timeout, timeout_seconds, [
     fn() {
