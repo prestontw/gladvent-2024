@@ -1,7 +1,7 @@
 import data/day7 as data
-import day6_test
 import day7 as day
 import gleeunit/should
+import utilities
 
 // gleeunit test functions end in `_test`
 pub fn part1_test() {
@@ -24,12 +24,12 @@ pub fn part1_sample_test() {
   |> should.equal(3749)
 }
 
-pub fn part2_test_() {
+pub fn part2() {
   let timeout_seconds = 60
-  #(day6_test.Timeout, timeout_seconds, [
+  #(utilities.Timeout, timeout_seconds, [
     fn() {
       day.part2(data.input())
-      |> should.equal(1)
+      |> should.equal(150_077_710_195_188)
     },
   ])
 }

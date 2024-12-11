@@ -1,16 +1,13 @@
 import data/day6 as data
 import day6 as day
 import gleeunit/should
-
-pub type Timeout {
-  Timeout
-}
+import utilities
 
 // gleeunit test functions end in `_test`
 pub fn input() {
   //         ^^^^^ Must end with an underscore
   let timeout_seconds = 60
-  #(Timeout, timeout_seconds, [
+  #(utilities.Timeout, timeout_seconds, [
     fn() {
       day.part1(data.input())
       |> should.equal(4454)
