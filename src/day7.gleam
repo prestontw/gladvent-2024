@@ -39,6 +39,32 @@ fn can_be_combined(equation) {
   }
 }
 
+fn can_be_combined2(equation) {
+  let #(test_value, numbers) = equation
+  let assert [first, ..rest] = numbers
+  let combinations =
+    rest
+    |> list.fold([first] |> set.from_list, fn(running_numbers, number) {
+      let summed = running_numbers |> set.map(fn(n) { n + number })
+      let multiplied = running_numbers |> set.map(fn(n) { n * number })
+      let string_number = number |> int.to_string
+      let concatenated =
+        running_numbers
+        |> set.map(fn(n) {
+          n
+          |> int.to_string
+          |> fn(sn) { sn <> string_number }
+          |> int.parse
+          |> result.unwrap(0)
+        })
+      summed |> set.union(multiplied) |> set.union(concatenated)
+    })
+  case combinations |> set.contains(test_value) {
+    True -> Ok(test_value)
+    False -> Error(Nil)
+  }
+}
+
 pub fn part1(s: String) {
   s
   |> parse
@@ -48,6 +74,7 @@ pub fn part1(s: String) {
 
 pub fn part2(s: String) {
   s
-  |> common.lines
-  |> list.length
+  |> parse
+  |> list.filter_map(can_be_combined2)
+  |> common.sum
 }
