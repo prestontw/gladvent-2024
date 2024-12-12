@@ -1,4 +1,5 @@
 import common
+import gleam/bool
 import gleam/dict
 import gleam/int
 import gleam/list
@@ -42,4 +43,8 @@ pub fn get(g: Grid(item), pos: #(Int, Int)) -> Result(item, Nil) {
 
 pub fn set(g: Grid(item), pos: #(Int, Int), val: item) -> Grid(item) {
   Grid(..g, data: g.data |> dict.insert(pos, val))
+}
+
+pub fn within_bounds(g: Grid(item), pos: #(Int, Int)) -> Bool {
+  pos.0 >= 0 && pos.0 < g.max_columns && pos.1 >= 0 && pos.1 < g.number_rows
 }
